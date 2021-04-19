@@ -91,6 +91,7 @@ def sgd_optimizer(model, lr, momentum, weight_decay):
     optimizer = torch.optim.SGD(params, lr, momentum=momentum)
     return optimizer
 
+
 def main():
     args = parser.parse_args()
 
@@ -326,8 +327,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args, lr_scheduler):
             print('cur lr: ', lr_scheduler.get_lr()[0])
 
 
-
-
 def validate(val_loader, model, criterion, args):
     batch_time = AverageMeter('Time', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
@@ -378,8 +377,6 @@ def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     torch.save(state, filename)
     if is_best:
         shutil.copyfile(filename, 'model_best.pth.tar')
-
-
 
 
 if __name__ == '__main__':

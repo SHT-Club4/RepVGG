@@ -6,6 +6,7 @@ from repvgg import get_RepVGG_func_by_name
 #   The PSPNet parts are from
 #   https://github.com/hszhao/semseg
 
+
 class PPM(nn.Module):
     def __init__(self, in_dim, reduction_dim, bins, BatchNorm):
         super(PPM, self).__init__()

@@ -36,7 +36,6 @@ class RepVGGBlock(nn.Module):
             self.rbr_1x1 = conv_bn(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=stride, padding=padding_11, groups=groups)
             print('RepVGG Block, identity = ', self.rbr_identity)
 
-
     def forward(self, inputs):
         if hasattr(self, 'rbr_reparam'):
             return self.nonlinearity(self.rbr_reparam(inputs))
@@ -47,8 +46,6 @@ class RepVGGBlock(nn.Module):
             id_out = self.rbr_identity(inputs)
 
         return self.nonlinearity(self.rbr_dense(inputs) + self.rbr_1x1(inputs) + id_out)
-
-
 
 #   This func derives the equivalent kernel and bias in a DIFFERENTIABLE way.
 #   You can get the equivalent kernel and bias at any time and do whatever you want,
@@ -111,7 +108,6 @@ class RepVGGBlock(nn.Module):
             self.__delattr__('rbr_identity')
 
 
-
 class RepVGG(nn.Module):
 
     def __init__(self, num_blocks, num_classes=1000, width_multiplier=None, override_groups_map=None, deploy=False):
@@ -134,7 +130,6 @@ class RepVGG(nn.Module):
         self.stage4 = self._make_stage(int(512 * width_multiplier[3]), num_blocks[3], stride=2)
         self.gap = nn.AdaptiveAvgPool2d(output_size=1)
         self.linear = nn.Linear(int(512 * width_multiplier[3]), num_classes)
-
 
     def _make_stage(self, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)
@@ -163,29 +158,36 @@ optional_groupwise_layers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26]
 g2_map = {l: 2 for l in optional_groupwise_layers}
 g4_map = {l: 4 for l in optional_groupwise_layers}
 
+
 def create_RepVGG_A0(deploy=False):
     return RepVGG(num_blocks=[2, 4, 14, 1], num_classes=1000,
                   width_multiplier=[0.75, 0.75, 0.75, 2.5], override_groups_map=None, deploy=deploy)
+
 
 def create_RepVGG_A1(deploy=False):
     return RepVGG(num_blocks=[2, 4, 14, 1], num_classes=1000,
                   width_multiplier=[1, 1, 1, 2.5], override_groups_map=None, deploy=deploy)
 
+
 def create_RepVGG_A2(deploy=False):
     return RepVGG(num_blocks=[2, 4, 14, 1], num_classes=1000,
                   width_multiplier=[1.5, 1.5, 1.5, 2.75], override_groups_map=None, deploy=deploy)
+
 
 def create_RepVGG_B0(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[1, 1, 1, 2.5], override_groups_map=None, deploy=deploy)
 
+
 def create_RepVGG_B1(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[2, 2, 2, 4], override_groups_map=None, deploy=deploy)
 
+
 def create_RepVGG_B1g2(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[2, 2, 2, 4], override_groups_map=g2_map, deploy=deploy)
+
 
 def create_RepVGG_B1g4(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
@@ -196,9 +198,11 @@ def create_RepVGG_B2(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[2.5, 2.5, 2.5, 5], override_groups_map=None, deploy=deploy)
 
+
 def create_RepVGG_B2g2(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[2.5, 2.5, 2.5, 5], override_groups_map=g2_map, deploy=deploy)
+
 
 def create_RepVGG_B2g4(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
@@ -209,9 +213,11 @@ def create_RepVGG_B3(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[3, 3, 3, 5], override_groups_map=None, deploy=deploy)
 
+
 def create_RepVGG_B3g2(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
                   width_multiplier=[3, 3, 3, 5], override_groups_map=g2_map, deploy=deploy)
+
 
 def create_RepVGG_B3g4(deploy=False):
     return RepVGG(num_blocks=[4, 6, 16, 1], num_classes=1000,
@@ -219,23 +225,24 @@ def create_RepVGG_B3g4(deploy=False):
 
 
 func_dict = {
-'RepVGG-A0': create_RepVGG_A0,
-'RepVGG-A1': create_RepVGG_A1,
-'RepVGG-A2': create_RepVGG_A2,
-'RepVGG-B0': create_RepVGG_B0,
-'RepVGG-B1': create_RepVGG_B1,
-'RepVGG-B1g2': create_RepVGG_B1g2,
-'RepVGG-B1g4': create_RepVGG_B1g4,
-'RepVGG-B2': create_RepVGG_B2,
-'RepVGG-B2g2': create_RepVGG_B2g2,
-'RepVGG-B2g4': create_RepVGG_B2g4,
-'RepVGG-B3': create_RepVGG_B3,
-'RepVGG-B3g2': create_RepVGG_B3g2,
-'RepVGG-B3g4': create_RepVGG_B3g4,
+    'RepVGG-A0': create_RepVGG_A0,
+    'RepVGG-A1': create_RepVGG_A1,
+    'RepVGG-A2': create_RepVGG_A2,
+    'RepVGG-B0': create_RepVGG_B0,
+    'RepVGG-B1': create_RepVGG_B1,
+    'RepVGG-B1g2': create_RepVGG_B1g2,
+    'RepVGG-B1g4': create_RepVGG_B1g4,
+    'RepVGG-B2': create_RepVGG_B2,
+    'RepVGG-B2g2': create_RepVGG_B2g2,
+    'RepVGG-B2g4': create_RepVGG_B2g4,
+    'RepVGG-B3': create_RepVGG_B3,
+    'RepVGG-B3g2': create_RepVGG_B3g2,
+    'RepVGG-B3g4': create_RepVGG_B3g4,
 }
+
+
 def get_RepVGG_func_by_name(name):
     return func_dict[name]
-
 
 
 #   Use this for converting a RepVGG model or a bigger model with RepVGG as its component
@@ -254,7 +261,7 @@ def get_RepVGG_func_by_name(name):
 #   segmentation_test(deploy_pspnet)
 #   =====================   example_pspnet.py shows an example
 
-def repvgg_model_convert(model:torch.nn.Module, save_path=None, do_copy=False):
+def repvgg_model_convert(model: torch.nn.Module, save_path=None, do_copy=False):
     if do_copy:
         model = copy.deepcopy(model)
     for module in model.modules():
